@@ -65,8 +65,37 @@ $superheroes = [
 
 ?>
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+<?php
+$character = filter_var($_GET['charac_data'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+$store_char = "";
+$store_al="";
+$store_name="";
+$data=strtolower($character);
+foreach ($superheroes as $hero){
+    if ($data === strtolower($hero['alias']) || $data === strtolower($hero['name'])){ 
+        $store_char = $hero;
+        $store_al=strtoupper($store_char['alias']);
+        $store_name=strtoupper($store_char['name']);
+    }
+}   
+?>
+
+<?php if($data != ""): ?>
+    <?php if($store_char != ""): ?>
+        <?= "<hr>"?> 
+        <?= "<h3>$store_al</h3>" ?> 
+        <?= "<h4>A.K.A $store_name</h4>"?> 
+        <?= "<p> ${store_char['biography']}</p>"?>
+    <?php endif; ?>
+    <?php if($store_char === ""): ?>
+        <?= "<hr>" ?> 
+        <h3>SUPERHERO NOT FOUND</h3>
+    <?php endif; ?>
+<?php else: ?>
+    <?= "<hr>"?> 
+    <ul>
+    <?php foreach ($superheroes as $superhero): ?>
+        <li><?= $superhero['alias']; ?></li>
+    <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
